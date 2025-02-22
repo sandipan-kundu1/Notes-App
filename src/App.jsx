@@ -35,19 +35,31 @@ function App() {
 
   // Load notes from local storage on mount, or use initial notes if none exist
   useEffect(() => {
-    const savedNotes = JSON.parse(localStorage.getItem('notes'));
-    if (savedNotes && savedNotes.length > 0) {
-      setNotes(savedNotes);
-    } else {
-      // Set initial notes and save to localStorage
+    try {
+      const savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
+      if (savedNotes.length > 0) {
+        setNotes(savedNotes);
+      } else {
+        // Set initial notes and save to localStorage
+        setNotes(initialNotes);
+        localStorage.setItem('notes', JSON.stringify(initialNotes));
+      }
+    } catch (error) {
+      console.error('Error loading notes from localStorage:', error);
+      // Fallback to initial notes if localStorage is corrupted or inaccessible
       setNotes(initialNotes);
       localStorage.setItem('notes', JSON.stringify(initialNotes));
     }
   }, []);
 
-  // Save notes to local storage whenever they change
+  // Save notes to local storage whenever they change, with error handling
   useEffect(() => {
-    localStorage.setItem('notes', JSON.stringify(notes));
+    try {
+      localStorage.setItem('notes', JSON.stringify(notes));
+    } catch (error) {
+      console.error('Error saving notes to localStorage:', error);
+      alert('Warning: Unable to save notes due to storage limits or browser restrictions. Some data may be lost.');
+    }
   }, [notes]);
 
   const addNote = (note) => {
@@ -66,27 +78,27 @@ function App() {
   const categories = ['All', ...new Set(notes.map(note => note.category).filter(Boolean))];
 
   return (
-    <div className="w-screen bg-gradient-to-r pt-10 pb-10 from-purple-500 to-red-500">
-      <div className="w-1/2 justify-center mx-auto p-10 bg-white rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
-        <h1 className="text-4xl font-bold mb-6 text-center text-blue-600">My Notes App</h1>
+    <div className="w-screen py-10 flex items-center justify-center bg-gradient-to-r from-purple-500 to-red-500 p-4">
+      <div className="max-w-2xl p-7 bg-white rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
+        <h1 className="text-4xl font-bold mb-8 text-center text-blue-600">My Notes App</h1>
         <NoteForm 
           addNote={addNote} 
           updateNote={updateNote} 
           editingNote={editingNote} 
           setEditingNote={setEditingNote}
         />
-        <div className="mt-6 flex flex-col sm:flex-row gap-4">
+        <div className="mt-8 flex flex-col sm:flex-row gap-6">
           <input
             type="text"
             placeholder="Search notes..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="p-3 border rounded-full w-full sm:w-1/2 bg-yellow-100 text-blue-800 placeholder-blue-500 focus:ring-2 focus:ring-purple-400"
+            className="p-4 border rounded-full w-full sm:w-1/2 bg-yellow-100 text-blue-800 placeholder-blue-500 focus:ring-2 focus:ring-purple-400"
           />
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="p-3 border rounded-full w-full sm:w-1/2 bg-green-100 text-green-800 focus:ring-2 focus:ring-pink-400"
+            className="p-4 border rounded-full w-full sm:w-1/2 bg-green-100 text-green-800 focus:ring-2 focus:ring-pink-400"
           >
             {categories.map(category => (
               <option key={category} value={category} className="bg-white">{category}</option>
