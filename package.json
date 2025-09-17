@@ -1,0 +1,14 @@
+{
+  "name": "notes-app-monorepo",
+  "version": "1.0.0",
+  "description": "Full-stack Notes App with React frontend and Express backend",
+  "scripts": {
+    "dev": "concurrently \"npm run client\" \"npm run server\"",
+    "client": "cd frontend && npm run dev",
+    "server": "cd backend && npm run dev",
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
