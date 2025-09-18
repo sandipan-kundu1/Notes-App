@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const API_URL = 'https://your-render-app.onrender.com';
+const API_URL = 'http://localhost:5000';
 
 function Analytics({ isOpen, onClose }) {
   const [analytics, setAnalytics] = useState(null);

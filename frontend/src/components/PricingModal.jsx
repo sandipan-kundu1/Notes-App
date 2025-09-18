@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const API_URL = 'https://your-render-app.onrender.com';
+const API_URL = 'http://localhost:5000';
 
 function PricingModal({ isOpen, onClose, currentPlan, onUpgrade }) {
   const [loading, setLoading] = useState(false);
