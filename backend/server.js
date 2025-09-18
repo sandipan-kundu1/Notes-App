@@ -24,6 +24,10 @@ app.use(express.json());
 app.use(passport.initialize());
 
 // Routes
+app.get('/', (req, res) => {
+  res.json({ message: 'Notes App API is running!' });
+});
+
 app.use('/auth', require('./routes/auth'));
 app.use('/api/notes', require('./routes/notes'));
 app.use('/api/subscription', require('./routes/subscription'));
