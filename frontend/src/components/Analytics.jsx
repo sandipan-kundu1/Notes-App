@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://notes-app-7t81.onrender.com';
 
 function Analytics({ isOpen, onClose }) {
   const [analytics, setAnalytics] = useState(null);
